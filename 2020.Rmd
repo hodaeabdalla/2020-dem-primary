@@ -1,0 +1,108 @@
+---
+title: "What Effect Does Media Mentions Have On 2020 Democratic Presidential Candidate Performance?"
+date: "12/12/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(gt)
+library(moderndive)
+library(cowplot)
+library(tidyverse)
+```
+
+## RESEARCH QUESTION
+
+The mainstream media has long been a victim of attacks from politicians and their supporters for coverage that is viewed as unfair. More specifically, the media has been accused of using their power to bolster candidates that they support. This begs the question: How does media coverage affect a candidate's performance? I hypothesize that there will be a positive correlation between both types of media coverage and betting and polling outcomes.
+
+
+## BACKGROUND
+There are currently over a dozen candidates running for the 2020 Democratic nomination for president of the United States. In the early stages of the nomination process, there has been contention over the role of the mainstream media and it's role in shaping public opinion and ultimately the outcome of the primary. 
+
+In 2016, Donald Trump was able to win the free media game, which some believe led to the legitimization of his campaign. Similarly, Pete Buttigieg is known to never turn down interview opportunities from the media. In fact, some credit his rise to his open-ended availability to the media. It can be contested that the media's portrayal of candidates has the ability to affect voter's perception of them and in turn, how they may vote. In addition, if the media portrays that a certain candidate's win is inevitable, that may affect how the public predicts the election. This was found to be true in 2016 when bet prices were extraordinarily high for Hillary Clinton leading to election night. This project looks at how these effects have taken place so far in the 2020 Democratic primary.
+
+
+## METHODS
+This project explores this question with cable mentions data, online mentions data, and polling data from FiveThirtyEight and betting data from PredictIt. The cable mentions data contains the mentions of currently declared major candidates for the 2020 Democratic primary since December 30, 2018, across CNN, Fox News, and MSNBC. Coverage is measured by splitting daily news footage into 15-second clips and finding the clips that contain a mention of the candidates' first and last names. The online mentions data contains the mentions of currently declared major candidates in online news stories. The polling data is measured by aggregating national polling from several credible polling agencies on the major candidates. The betting data represents the latest 'Yes' price offered for 24 declared and undeclared presidential candidates. This data allows for the evaluation of the 2020 media coverage by comparing the coverage to public opinion through the polling and betting data. Each dataset is averaged for each month of 2019. I decided to use both online and cable news mentions to account for discrepancies between the form of media voters are exposed to. I decided to use both polling and betting data as outcomes because polling indicates who voters support, whereas share price indicates who they predict to win. I combined the four datasets by candidate name and the relationship was measured using a linear model for each possible combination of media type and outcome.   
+
+## RESULTS
+
+```{r}
+
+# Read in rds file with cleaned up data
+
+clean_data <- readRDS("2020_Primary/cleaned_data.rds")
+
+  
+# I piped the clean data into a ggplot with all four combinations of
+# relationships. I made a scatter plot because it is the best method to
+# show correlation. I used geom_smooth to add a regression line.
+
+  p1 <- clean_data %>% 
+        group_by(name) %>%
+    drop_na() %>%
+            ggplot(aes(x = clips, y = percent)) + 
+            geom_point() +
+            labs(x = "Average Cable News Mentions",
+                 y = "Average Polling Percentage") +
+        geom_smooth(method = "lm", se = FALSE) +
+        labs(title = "Cable Mentions vs. Polls")
+  
+  p2 <- clean_data %>% 
+        group_by(name) %>%
+    drop_na() %>%
+            ggplot(aes(x = stories, y = percent)) + 
+            geom_point() +
+            labs(x = "Average Online News Mentions",
+                 y = "Average Polling Percentage") +
+        geom_smooth(method = "lm", se = FALSE) +
+        labs(title = "Online Mentions vs. Polls")
+  
+  p3 <- clean_data %>% 
+        group_by(name) %>%
+    drop_na() %>%
+            ggplot(aes(x = clips, y = price)) + 
+            geom_point() +
+            labs(x = "Average Cable News Mentions",
+                 y = "Average Betting Price") +
+        geom_smooth(method = "lm", se = FALSE) +
+        labs(title = "Cable Mentions vs. Betting Price")
+  
+ p4 <- clean_data %>% 
+        group_by(name) %>%
+   drop_na() %>%
+            ggplot(aes(x = stories, y = price)) + 
+            geom_point() +
+            labs(x = "Average Online News Mentions",
+                 y = "Average Betting Price") +
+        geom_smooth(method = "lm", se = FALSE) +
+        labs(title = "Online Mentions vs. Betting Price")
+ 
+ # I used plot_grid from the cowplot package to place the plots side by side.
+  
+  plot_grid(p1, p2)
+  
+  plot_grid(p3, p4)
+ 
+  
+  # I made linear regression models for all four combinations to get the
+  # correlation coefficients for analysis.
+  
+ 
+lm(price ~ clips, clean_data)
+
+lm(price ~ stories, clean_data)
+
+lm(percent ~ clips, clean_data)
+
+lm(percent ~ stories, clean_data)
+  
+```
+
+
+## ANALYSIS
+The data confirmed my hypothesis. Overall, as average media and online mentions increases, poll percentage and betting price also increases. However, the relationship between both online and cable mentions and share price is not as strong as mentions and polling percentage. The key difference between polling and share price is that polls answer the question of who voters support for the nomination, whereas share prices reflect who the public believes will win the nomination. Creating the linear models revealed that as cable news clips increased, share price increases by 0.0001737. As online news stories increases, share price increases by 0.0002396. This leads to the conclusion that online news mentions have a greater effect on share price than cable mentions. Looking at polling percentage, as cable news increases, polling percent increases by 0.01853. As online news stories increases, polling percent increases by 0.02433. This means that online news stories also have a greater impact on polling percentage than cable mentions.
+
+Using this data, it is important to note that there are countless other factors that can be attributed to any particular candidate's polling and betting performance. Additional case-studies into individual candidate's performances and the level of media coverage they receive will be helpful in developing a more robust case for this relationship.
+
