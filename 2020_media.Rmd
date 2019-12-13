@@ -103,7 +103,7 @@ cable_mentions <- cable_mentions %>%
 
 clean_data <- 
 Reduce(function(...) merge(..., all=TRUE), list(online_mentions, cable_mentions, polling, betting)) %>%
-  group_by(name, month) %>%
+  group_by(name) %>% 
   summarise(percent = mean(pct, na.rm = TRUE), stories = mean(matched_stories, na.rm = TRUE), clips = mean(matched_clips, na.rm = TRUE), price = mean(OpenSharePrice, na.rm = TRUE))
 
 

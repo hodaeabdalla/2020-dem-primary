@@ -15,7 +15,7 @@ library(tidyverse)
 
 # Read in rds file with cleaned up data
 
-clean_data <- readRDS("cleaned_data.rds")
+clean_data <- readRDS("data.rds")
 
 
 # I defined input choices for factors that represent media type and outcomes outside of my UI.
@@ -76,12 +76,12 @@ ui <-
                                    answer the question of who voters support for the nomination, whereas
                                    share prices reflect who the public believes will win the nomination.
                                    Creating the  linear models revealed that as cable news clips increased, 
-                                   share price increases by 0.0001737. As online news stories increases, share
-                                   price increases by 0.0002396. This leads to the conclusion that online
+                                   share price increases by 0.0001723. As online news stories increases, share
+                                   price increases by 0.0002737. This leads to the conclusion that online
                                    news mentions has a greater effect on share price than cable mentions.
                                    Looking at polling percentage, as cable news increases, polling percent
-                                   increases by 0.01853. As online news stories increases, polling percent
-                                   increases by 0.02433. This means that online news stories also has a greater
+                                   increases by 0.01778. As online news stories increases, polling percent
+                                   increases by 0.0259. This means that online news stories also has a greater
                                    impact on polling percentage than cable mentions.")),
                             tabPanel("About", htmlOutput("about"))
                 )
@@ -161,8 +161,8 @@ server <- function(input, output) {
     
     
     p1 <- clean_data %>%
-        group_by(name) %>% 
         drop_na() %>%
+        group_by(name) %>%
         ggplot(aes(x = reorder(name, -clips), y = clips)) +
         geom_point(size=2) + 
         geom_segment(aes(x=name, 
