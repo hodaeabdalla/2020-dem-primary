@@ -35,9 +35,7 @@ This project explores this question with cable mentions data, online mentions da
 clean_data <- readRDS("2020_Primary/cleaned_data.rds")
 
   
-# I piped the clean data into a ggplot with all four combinations of
-# relationships. I made a scatter plot because it is the best method to
-# show correlation. I used geom_smooth to add a regression line.
+# I piped the clean data into a ggplot with all four combinations # of relationships. I made a scatter plot because it is the best  # method to show correlation. I used geom_smooth to add a  #regression line.
 
   p1 <- clean_data %>% 
         group_by(name) %>%
@@ -86,8 +84,7 @@ clean_data <- readRDS("2020_Primary/cleaned_data.rds")
   plot_grid(p3, p4)
  
   
-  # I made linear regression models for all four combinations to get the
-  # correlation coefficients for analysis.
+  # I made linear regression models for all four combinations to #get the correlation coefficients for analysis.
   
  
 lm(price ~ clips, clean_data)

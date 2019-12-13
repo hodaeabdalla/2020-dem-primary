@@ -101,6 +101,8 @@ cable_mentions <- cable_mentions %>%
   mutate(month = format(as.Date(date, format="%Y/%m/%d"),"%m")) %>%
    mutate(month = as.integer(month, format = "%m"))
 
+# Merged all of the data and summarised to get the mean of each # # value
+
 clean_data <- 
 Reduce(function(...) merge(..., all=TRUE), list(online_mentions, cable_mentions, polling, betting)) %>%
   group_by(name) %>% 

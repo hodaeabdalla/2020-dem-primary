@@ -4,4 +4,6 @@ library(fs)
 
 file_copy(path = "raw-data/data.rds", new_path = "2020_Primary/data.rds")
 
+#Copy the pdf into the www folder within the shinyapp
+
 file_copy(path = "2020.pdf", new_path = "2020_Primary/www/primary.pdf")

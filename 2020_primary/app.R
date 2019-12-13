@@ -50,7 +50,7 @@ ui <-
                             choices = outcomes,
                             selected = "Average Polling Percentage")),
             
-            # I created About and Panel tabs in the main panel
+            # I created three tabs in the main panel, each with plot or text outputs
             
             mainPanel(
                 tabsetPanel(type = "tabs",
@@ -83,7 +83,9 @@ ui <-
                                    increases by 0.01778. As online news stories increases, polling percent
                                    increases by 0.0259. This means that online news stories also has a greater
                                    impact on polling percentage than cable mentions.")),
-                            tabPanel("About", htmlOutput("about"))
+                            tabPanel("About", htmlOutput("about")),
+                            tabPanel("Video", tags$video(id="videoID", type = "video/mov",src = "2020_Primary.mov", 
+                                                         controls = "controls"))
                 )
             )))
 
@@ -139,6 +141,7 @@ server <- function(input, output) {
         str7 <- paste("Contact")
         str8 <- paste("This project was completed by Hoda Abdalla. I can be contacted at hodaabdalla@college.harvard.edu
                       and my github repo can be accessed at https://github.com/hodaeabdalla/2020-primary.")
+
         
         HTML(paste(h3(str1), p(str2), h3(str3), p(str4), h3(str5), p(str6), h3(str7), p (str8)))
     })
@@ -159,6 +162,10 @@ server <- function(input, output) {
         
     })
     
+    
+    # I piped the clean data into a ggplot with all four combinations # of relationships. 
+    # I made a scatter plot because it is the best method to show correlation. 
+    # I used geom_smooth to add a  regression line.
     
     p1 <- clean_data %>%
         drop_na() %>%
@@ -223,6 +230,9 @@ server <- function(input, output) {
     
     
     output$plot3 <- renderPlot({
+        
+        
+        # I used plot_grid from the cowplot package to place the plots side by side.
         
         plot_grid(p3, p4)
     })
