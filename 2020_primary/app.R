@@ -50,7 +50,7 @@ ui <-
                             choices = outcomes,
                             selected = "Average Polling Percentage")),
             
-            # I created three tabs in the main panel, each with plot or text outputs
+            # I created four tabs in the main panel, each with plot, video, or text outputs
             
             mainPanel(
                 tabsetPanel(type = "tabs",
@@ -84,8 +84,8 @@ ui <-
                                    increases by 0.0259. This means that online news stories also has a greater
                                    impact on polling percentage than cable mentions.")),
                             tabPanel("About", htmlOutput("about")),
-                            tabPanel("Video", tags$video(id="videoID", type = "video/mov",src = "2020_Primary.mov", 
-                                                         controls = "controls"))
+                            tabPanel("Video", tags$video(id="videoID", type = "video/mp4",src = "2020_Primary.mp4", 
+                                                         width = "500px", height = "350px", controls = "controls"))
                 )
             )))
 
